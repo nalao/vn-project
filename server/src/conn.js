@@ -1,9 +1,11 @@
 let mysql = require('mysql')
-const conn = mysql.createConnection({
+
+let conn = mysql.createPool({
+    connectionLimit: 10,
     host: 'localhost',
     user: 'root',
     // password:'',
-    database: 'db_restfull'
+    database: 'db_restfull'    
 })
 
 module.exports = conn
