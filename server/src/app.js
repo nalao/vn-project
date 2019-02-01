@@ -1,5 +1,6 @@
 let express = require('express')
 let bodyParser = require('body-parser')
+let conn = require('./conn')
 
 const app = express()
 
@@ -37,11 +38,27 @@ app.delete('/user/:userId', function(req, res){
 
 // get user by id
 app.get('/user/:userId', function(req, res){
-    res.send('ເບິ່ງຂໍ້ມູນຜູ້ໃຊ້ງານ')
+    const userId = req.params.userId
+    const queryString = 'SELECT * FROM users WHERE id = ?'
+    conn.query(queryString, [userId], function(err, rows, fields){
+        if(err) {
+            console.log(err)
+            return
+        }
+        res.json(rows)
+    })
 })
 
 app.get('/users', function(req, res){
-    res.send('ເບິ່ງຂໍ້ມູນຜູ້ໃຊ້ທັງໝົດ')
+    const queryString = 'SELECT * FROM users'
+    conn.query(queryString, function(err, rows, fields){
+        if(err) {
+            console.log(err)
+            res.end()
+            return
+        }
+        res.json(rows)
+    })
 })
 
 
