@@ -3,4 +3,5 @@
 	echo "Test Pull";
 	echo "Test push in VS Code";
 	echo "Test";
+	echo "Test add commit and push in one time"
 ?>
