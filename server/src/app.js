@@ -1,8 +1,10 @@
 let express = require('express')
 let bodyParser = require('body-parser')
+let morgan = require('morgan')
 let conn = require('./conn')
 
 const app = express()
+app.use(morgan('combined'))
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -23,7 +25,17 @@ app.post('/hello', function(req, res){
 /* RESTFUL Api for users management  */
 // create user
 app.post('/user', function(req, res){
-    res.send('ສ້າງຜູ້ໃຊ້')
+    const fName = req.body.fname
+    const lName = req.body.lname
+    const queryString = "INSERT INTO users(fname, lname) VALUES(?, ?)"
+    conn.query(queryString, [fName, lName], function(err, results, fields){
+        if(err){
+            console.log(err)
+            return
+        }
+        console.log("inserted a new user with id: " + results.insertId)
+        res.end()
+    })
 })
 
 // edit user, suspend, active
@@ -62,7 +74,7 @@ app.get('/users', function(req, res){
 })
 
 
-let port = 8080
+let port = 3000
 
 app.listen(port, function(){
     console.log('server running on ' + port);
