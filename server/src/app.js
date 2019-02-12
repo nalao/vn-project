@@ -1,5 +1,6 @@
 let express = require('express')
 let bodyParser = require('body-parser')
+const {sequelize} = require('./models')
 let morgan = require('morgan')
 
 const app = express()
@@ -12,6 +13,12 @@ require("./routes")(app)
 
 let port = 3000
 
-app.listen(port, function(){
-    console.log('server running on ' + port);
+sequelize.sync({force: false}).then(() => {
+    app.listen(port, () => {
+        console.log('Sever running on ' + port )
+    })
 })
+
+// app.listen(port, function(){
+//     console.log('server running on ' + port);
+// })
